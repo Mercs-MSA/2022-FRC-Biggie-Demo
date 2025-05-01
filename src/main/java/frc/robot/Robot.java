@@ -92,12 +92,12 @@ public class Robot extends TimedRobot {
     System.out.println("Version: v1.0");
     System.out.println("==========================");
 
-    shootTrig.whenActive(new InstantCommand(() -> {shooter_motor1.set(shooter_setpoint);}), false);
+    shootTrig.whenActive(new InstantCommand(() -> {shooter_motor1.set(1);}), false);
     shootTrig.whenInactive(new InstantCommand(() -> {shooter_motor1.set(0);}), false);
     intakeTrig.whenActive(new InstantCommand(() -> {intake_motor1.set(0.8);conveyer1.set(0.8);}), false);
     stopAllTrig.whenActive(new InstantCommand(() -> {intake_motor1.set(0);conveyer1.set(0);}), false);
 
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    // NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     shooter_motor1.configFactoryDefault();
     shooter_motor2.configFactoryDefault();
     driver_leftmotor1.configFactoryDefault();
@@ -109,10 +109,10 @@ public class Robot extends TimedRobot {
     intake_motor1.configFactoryDefault();
     conveyer1.configFactoryDefault();
 
-    driver_leftmotor1.setNeutralMode(NeutralMode.Coast);
-    driver_leftmotor2.setNeutralMode(NeutralMode.Coast);
-    driver_rightmotor1.setNeutralMode(NeutralMode.Coast);
-    driver_rightmotor2.setNeutralMode(NeutralMode.Coast);
+    driver_leftmotor1.setNeutralMode(NeutralMode.Brake);
+    driver_leftmotor2.setNeutralMode(NeutralMode.Brake);
+    driver_rightmotor1.setNeutralMode(NeutralMode.Brake);
+    driver_rightmotor2.setNeutralMode(NeutralMode.Brake);
 
     //Mechanism Inversion settings 
     shooter_motor2.setInverted(true);
@@ -166,13 +166,8 @@ public class Robot extends TimedRobot {
 
     climber_motor1.set(ControlMode.Position, 0.0);
 
-    // configure limelight camera
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
-
     //Setup compressor controls for analog pressure transducer
     phCompressor.enableAnalog(119, 120);
-    phCompressor.enabled();
 
     //Initializes Solenoids on position 'A'
     IntakeSolenoid.set(Value.kForward);
@@ -186,7 +181,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    // SmartDashboard.putNumber("High Side Pressure", phCompressor.getPressure());
+    SmartDashboard.putNumber("High Side Pressure", phCompressor.getPressure());
+    SmartDashboard.putData("Comp", phCompressor);
     // SmartDashboard.putBoolean("Cargo Detected on Conveyor", conveyor_loc_1.get());
     // SmartDashboard.putNumber("Climber Arm Angle relative to robot base", climberEncoder.get());
     // SmartDashboard.putNumber("Distance to Goal", camAngletoDistance(ty_angle));
@@ -301,12 +297,12 @@ public class Robot extends TimedRobot {
   }
 
   void newDrive2(double leftControl, double rightControl) {
-    if (Math.abs(leftControl) < 0.07) {
-      leftControl = 0.0;
-    }
-    if (Math.abs(rightControl) < 0.07) {
-      rightControl = 0.0;
-    }    
+    // if (Math.abs(leftControl) < 0.07) {
+    //   leftControl = 0.0;
+    // }
+    // if (Math.abs(rightControl) < 0.07) {
+    //   rightControl = 0.0;
+    // }    
     driver_leftmotor1.set(leftControl);
     driver_rightmotor1.set(rightControl); 
   }
