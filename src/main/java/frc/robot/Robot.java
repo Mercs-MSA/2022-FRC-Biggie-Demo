@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
   private double shooter_setpoint = 16250;
 
   private Trigger shootTrig = new Trigger(copilot_joystick::getAButton);
+  private Trigger shootStopTrig = new Trigger(copilot_joystick::getYButton);
   private Trigger intakeTrig = new Trigger(copilot_joystick::getBButton);
   private Trigger stopAllTrig = new Trigger(copilot_joystick::getXButton);
   
@@ -92,9 +93,9 @@ public class Robot extends TimedRobot {
     System.out.println("Version: v1.0");
     System.out.println("==========================");
 
-    shootTrig.whenActive(new InstantCommand(() -> {shooter_motor1.set(1);}), false);
-    shootTrig.whenInactive(new InstantCommand(() -> {shooter_motor1.set(0);}), false);
-    intakeTrig.whenActive(new InstantCommand(() -> {intake_motor1.set(0.8);conveyer1.set(0.8);}), false);
+    shootTrig.whenActive(new InstantCommand(() -> {shooter_motor1.set(copilot_joystick.getLeftTriggerAxis());}), false);
+    shootStopTrig.whenActive(new InstantCommand(() -> {shooter_motor1.set(0);}), false);
+    intakeTrig.whenActive(new InstantCommand(() -> {intake_motor1.set(0.7);conveyer1.set(0.7);}), false);
     stopAllTrig.whenActive(new InstantCommand(() -> {intake_motor1.set(0);conveyer1.set(0);}), false);
 
     // NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
